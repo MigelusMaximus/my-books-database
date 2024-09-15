@@ -42,5 +42,22 @@ def add_book():
         return redirect(url_for('home'))
     return render_template('add_book.html')
 
+
+@app.route('/edit/<int:id>', methods=['GET', 'POST'])
+def edit_book(id):
+    book = Book.query.get_or_404(id)
+    
+    if request.method == 'POST':
+        book.title = request.form['title']
+        book.description = request.form['description']
+        book.cover_url = request.form['cover_url']
+        book.category = request.form['category']
+        
+        db.session.commit()
+        return redirect(url_for('home'))
+    
+    return render_template('edit_book.html', book=book)
+
+
 if __name__ == '__main__':
     app.run(debug=True)
