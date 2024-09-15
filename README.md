@@ -1,2 +1,4 @@
-# my-books-database
-Web app for sorting my book collection
+# Bookerino
+Web app for sorting my book collection.
+
+Python+Flask+SQLAlchemy
