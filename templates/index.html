@@ -6,13 +6,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Book Collection</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-
 </head>
 
 <body>
     <h1>My Book Collection</h1>
 
     <a href="{{ url_for('add_book') }}">Add a New Book</a>
+
+    <!-- Search and Filter Form -->
+    <form method="GET" action="{{ url_for('home') }}">
+        <input type="text" name="q" placeholder="Search by title, description, or tags" value="{{ search_query }}" />
+
+        <select name="status">
+            <option value="">Filter by Reading Status</option>
+            <option value="to read" {% if status_filter=='to read' %}selected{% endif %}>To Read</option>
+            <option value="reading" {% if status_filter=='reading' %}selected{% endif %}>Reading Right Now</option>
+            <option value="read" {% if status_filter=='read' %}selected{% endif %}>Already Read</option>
+        </select>
+        <button type="submit">Search & Filter</button>
+    </form>
 
     <ul>
         {% for book in books %}
@@ -24,7 +36,6 @@
             <p><strong>Status:</strong> {{ book.status }}</p>
             <p><strong>Progress:</strong> {{ book.pages_read }} / {{ book.pages }} pages</p>
 
-            <!-- Progress Bar -->
             {% if book.pages > 0 %}
             {% set percentage = (book.pages_read / book.pages) * 100 %}
             <div class="progress">
@@ -40,8 +51,8 @@
         </li>
         {% endfor %}
     </ul>
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
 
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 
 </html>

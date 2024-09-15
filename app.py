@@ -29,8 +29,30 @@ with app.app_context():
 
 @app.route('/')
 def home():
-    books = Book.query.all()  # Fetch all books from the database
-    return render_template('index.html', books=books)
+
+    # Get the search query and filters from request.args
+    search_query = request.args.get('q', '')
+    status_filter = request.args.get('status', '')
+    
+    
+    # Base query to get all books
+    query = Book.query
+
+    # Apply search filter if a query exists
+    if search_query:
+        query = query.filter(Book.title.contains(search_query) |
+                             Book.description.contains(search_query) |
+                             Book.tags.contains(search_query))
+
+    # Apply reading status filter if selected
+    if status_filter:
+        query = query.filter_by(status=status_filter)
+
+
+
+    books = query.all()  # Fetch the filtered books
+    return render_template('index.html', books=books, search_query=search_query, status_filter=status_filter)
+
 
 @app.route('/add', methods=['GET', 'POST'])
 def add_book():
