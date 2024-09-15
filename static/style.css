@@ -48,3 +48,25 @@ li {
     background-color: #fff;
     border: 1px solid #ccc;
 }
+
+/* Progress bar container */
+.progress {
+    width: 100%;
+    max-width: 300px;
+    background-color: #f3f3f3;
+    border-radius: 25px;
+    overflow: hidden;
+    height: 20px;
+    margin: 10px 0;
+}
+
+/* Progress bar fill */
+.progress-bar {
+    background-color: #4caf50;
+    height: 100%;
+    text-align: center;
+    line-height: 20px;
+    color: white;
+    font-size: 12px;
+    border-radius: 25px;
+}

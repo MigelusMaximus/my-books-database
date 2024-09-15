@@ -20,11 +20,27 @@
             <h2>{{ book.title }}</h2>
             <p>{{ book.description }}</p>
             <p><strong>Category:</strong> {{ book.category }}</p>
+            <p><strong>Tags:</strong> {{ book.tags }}</p>
+            <p><strong>Status:</strong> {{ book.status }}</p>
+            <p><strong>Progress:</strong> {{ book.pages_read }} / {{ book.pages }} pages</p>
+
+            <!-- Progress Bar -->
+            {% if book.pages > 0 %}
+            {% set percentage = (book.pages_read / book.pages) * 100 %}
+            <div class="progress">
+                <div class="progress-bar" data-progress="{{ percentage|int }}" aria-valuenow="{{ percentage|int }}"
+                    aria-valuemin="0" aria-valuemax="100">
+                    {{ percentage|int }}%
+                </div>
+            </div>
+            {% endif %}
+
             <img src="{{ book.cover_url }}" alt="Book Cover" style="width:150px;">
             <br><a href="{{ url_for('edit_book', id=book.id) }}">Edit</a>
         </li>
         {% endfor %}
     </ul>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 
 </body>
 

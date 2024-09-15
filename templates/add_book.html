@@ -29,6 +29,25 @@
             <option value="Science">Science</option>
             <option value="History">History</option>
         </select><br><br>
+        <label for="tags">Tags (comma-separated):</label><br>
+        <input type="text" id="tags" name="tags" value="{{ book.tags if book else '' }}"><br><br>
+        <label for="status">Reading Status:</label><br>
+        <select id="status" name="status">
+            <option value="to read">To Read</option>
+            <option value="reading">Reading Right Now</option>
+            <option value="read">Already Read</option>
+        </select><br><br>
+
+        <label for="pages">Total Pages:</label><br>
+        <input type="number" id="pages" name="pages" required><br><br>
+
+        <label for="pages_read">Pages Read:</label><br>
+        <input type="number" id="pages_read" name="pages_read" value="0" required><br><br>
+
+
+
+
+
 
         <button type="submit">Add Book</button>
     </form>

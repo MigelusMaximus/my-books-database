@@ -24,6 +24,22 @@
         <label for="category">Category:</label><br>
         <input type="text" id="category" name="category" value="{{ book.category }}" required><br><br>
 
+        <label for="tags">Tags (comma-separated):</label><br>
+        <input type="text" id="tags" name="tags" value="{{ book.tags if book else '' }}"><br><br>
+        <label for="status">Reading Status:</label><br>
+        <select id="status" name="status">
+            <option value="to read" {% if book.status=='to read' %}selected{% endif %}>To Read</option>
+            <option value="reading" {% if book.status=='reading' %}selected{% endif %}>Reading Right Now</option>
+            <option value="read" {% if book.status=='read' %}selected{% endif %}>Already Read</option>
+        </select><br><br>
+
+        <label for="pages">Total Pages:</label><br>
+        <input type="number" id="pages" name="pages" value="{{ book.pages }}" required><br><br>
+
+        <label for="pages_read">Pages Read:</label><br>
+        <input type="number" id="pages_read" name="pages_read" value="{{ book.pages_read }}" required><br><br>
+
+
         <button type="submit">Save Changes</button>
     </form>
 

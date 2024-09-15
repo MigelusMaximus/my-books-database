@@ -16,6 +16,12 @@ class Book(db.Model):
     description = db.Column(db.String(500), nullable=False)
     cover_url = db.Column(db.String(250), nullable=False)
     category = db.Column(db.String(100), nullable=False)  # New field for categories
+    tags = db.Column(db.String(250), nullable=True)  # Add a tags field (comma-separated)
+    status = db.Column(db.String(50), nullable=False, default='to read')  # Status: "to read", "reading", "read"
+    pages = db.Column(db.Integer, nullable=True)  # Total pages
+    pages_read = db.Column(db.Integer, nullable=True, default=0)  # Pages read so far
+
+
 
 # Create the database and tables
 with app.app_context():
@@ -33,9 +39,23 @@ def add_book():
         description = request.form['description']
         cover_url = request.form['cover_url']
         category = request.form['category']  # Get the category from the form
+        tags = request.form['tags']  # Ensure tags are retrieved from the form
+        status = request.form['status']  # Handle reading status
+        pages = request.form['pages']    # Handle total pages
+        pages_read = request.form['pages_read']  # Handle pages read
 
         # Add the book to the database
-        new_book = Book(title=title, description=description, cover_url=cover_url, category=category)
+        new_book = Book(
+            title=title, 
+            description=description, 
+            cover_url=cover_url, 
+            category=category, 
+            tags=tags,
+            status=status,
+            pages=pages,
+            pages_read=pages_read
+        )
+        
         db.session.add(new_book)
         db.session.commit()
 
@@ -52,6 +72,10 @@ def edit_book(id):
         book.description = request.form['description']
         book.cover_url = request.form['cover_url']
         book.category = request.form['category']
+        book.tags = request.form['tags']  # Make sure tags are updated
+        book.status = request.form['status']  # Handle reading status
+        book.pages = request.form['pages']    # Handle total pages
+        book.pages_read = request.form['pages_read']  # Handle pages read
         
         db.session.commit()
         return redirect(url_for('home'))
