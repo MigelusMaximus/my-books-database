@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ book.title }} - Book Details</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
@@ -20,8 +22,8 @@
 
     {% if book.pages > 0 %}
     {% set percentage = (book.pages_read / book.pages) * 100 %}
-    <div class="progress">
-        <div class="progress-bar" data-progress="{{ percentage|int }}" aria-valuenow="{{ percentage|int }}"
+    <div class="progress" style="background-color: #e0e0e0;">
+        <div class="progress-bar bg-success" data-progress="{{ percentage|int }}" aria-valuenow="{{ percentage|int }}"
             aria-valuemin="0" aria-valuemax="100">
             {{ percentage|int }}%
         </div>
@@ -35,6 +37,8 @@
     <p>{{ book.summary or "No summary yet." }}</p>
 
     <br><a href="{{ url_for('home') }}">Back to Home</a>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
 </body>
 
 </html>

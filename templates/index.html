@@ -5,60 +5,96 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Book Collection</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
-    <h1>My Book Collection</h1>
+    <div class="container">
+        <h1 class="my-4">My Book Collection</h1>
 
-    <a href="{{ url_for('add_book') }}">Add a New Book</a>
+        <a href="{{ url_for('add_book') }}" class="btn btn-primary mb-4">Add a New Book</a>
 
-    <!-- Search, Filter, and Sort Form -->
-    <form method="GET" action="{{ url_for('home') }}">
-        <input type="text" name="q" placeholder="Search by title, description, or tags" value="{{ search_query }}" />
+        <!-- Search and Filter Form -->
+        <form method="GET" action="{{ url_for('home') }}" class="form-inline mb-4">
+            <input type="text" name="q" class="form-control mr-2" placeholder="Search by title, description, or tags"
+                value="{{ search_query }}" />
 
-        <select name="status">
-            <option value="">Filter by Reading Status</option>
-            <option value="to read" {% if status_filter=='to read' %}selected{% endif %}>To Read</option>
-            <option value="reading" {% if status_filter=='reading' %}selected{% endif %}>Reading Right Now</option>
-            <option value="read" {% if status_filter=='read' %}selected{% endif %}>Already Read</option>
-        </select>
+            <select name="status" class="form-control mr-2">
+                <option value="">Filter by Reading Status</option>
+                <option value="to read" {% if status_filter=='to read' %}selected{% endif %}>To Read</option>
+                <option value="reading" {% if status_filter=='reading' %}selected{% endif %}>Reading Right Now</option>
+                <option value="read" {% if status_filter=='read' %}selected{% endif %}>Already Read</option>
+            </select>
 
-        <!-- Sorting Dropdown -->
-        <select name="sort_by">
-            <option value="title" {% if sort_by=='title' %}selected{% endif %}>Sort by Title</option>
-            <option value="category" {% if sort_by=='category' %}selected{% endif %}>Sort by Category</option>
-            <option value="status" {% if sort_by=='status' %}selected{% endif %}>Sort by Status</option>
-            <option value="progress" {% if sort_by=='progress' %}selected{% endif %}>Sort by Reading Progress</option>
-        </select>
+            <select name="sort_by" class="form-control mr-2">
+                <option value="title" {% if sort_by=='title' %}selected{% endif %}>Sort by Title</option>
+                <option value="category" {% if sort_by=='category' %}selected{% endif %}>Sort by Category</option>
+                <option value="status" {% if sort_by=='status' %}selected{% endif %}>Sort by Status</option>
+                <option value="progress" {% if sort_by=='progress' %}selected{% endif %}>Sort by Reading Progress
+                </option>
+            </select>
 
-        <button type="submit">Search & Sort</button>
-    </form>
-    <ul>
-        {% for book in books %}
-        <li>
-            <h2><a href="{{ url_for('book_detail', id=book.id) }}">{{ book.title }}</a></h2>
-            <p>{{ book.description }}</p>
-            <p><strong>Category:</strong> {{ book.category }}</p>
-            <p><strong>Tags:</strong> {{ book.tags }}</p>
-            <p><strong>Status:</strong> {{ book.status }}</p>
-            <p><strong>Progress:</strong> {{ book.pages_read }} / {{ book.pages }} pages</p>
+            <button type="submit" class="btn btn-secondary">Search & Sort</button>
+        </form>
 
-            {% if book.pages > 0 %}
-            {% set percentage = (book.pages_read / book.pages) * 100 %}
-            <div class="progress">
-                <div class="progress-bar" data-progress="{{ percentage|int }}" aria-valuenow="{{ percentage|int }}"
-                    aria-valuemin="0" aria-valuemax="100">
-                    {{ percentage|int }}%
+        <ul>
+            {% for book in books %}
+            <li>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <!-- Clickable Image -->
+                        <a href="{{ url_for('book_detail', id=book.id) }}">
+                            <img src="{{ book.cover_url }}" class="card-img-top" alt="Book Cover">
+                        </a>
+
+                        <div class="card-body">
+                            <!-- Clickable Title -->
+                            <h5 class="card-title">
+                                <a href="{{ url_for('book_detail', id=book.id) }}">{{ book.title }}</a>
+                            </h5>
+
+                            <p class="card-text">{{ book.description }}</p>
+                            <p><strong>Category:</strong> {{ book.category }}</p>
+                            <p><strong>Tags:</strong> {{ book.tags }}</p>
+                            <p><strong>Status:</strong> {{ book.status }}</p>
+                            <p><strong>Progress:</strong> {{ book.pages_read }} / {{ book.pages }} pages</p>
+
+                            <!-- Progress Bar -->
+                            {% if book.pages > 0 %}
+                            {% set percentage = (book.pages_read / book.pages) * 100 %}
+                            <div class="progress" style="background-color: #e0e0e0;">
+                                <!-- Only one progress bar for the completed portion -->
+                                <div class="progress-bar bg-success" data-progress="{{ percentage|int }}"
+                                    aria-valuenow="{{ percentage|int }}" aria-valuemin="0" aria-valuemax="100">
+                                    {{ percentage|int }}%
+                                </div>
+                            </div>
+                            {% endif %}
+
+
+
+                        </div>
+
+                        <div class="card-footer">
+                            <a href="{{ url_for('edit_book', id=book.id) }}" class="btn btn-primary">Edit</a>
+                        </div>
+                    </div>
+
                 </div>
-            </div>
-            {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
 
-            <img src="{{ book.cover_url }}" alt="Book Cover" style="width:150px;">
-            <br><a href="{{ url_for('edit_book', id=book.id) }}">Edit</a>
-        </li>
-        {% endfor %}
-    </ul>
+    </div>
+
+    <!-- Bootstrap JS (optional) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 
