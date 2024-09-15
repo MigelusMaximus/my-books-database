@@ -17,42 +17,56 @@ label {
     font-weight: bold;
 }
 
-input,
-textarea,
-select {
+form input,
+form textarea,
+form select {
     width: 100%;
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
+    border-radius: 4px;
+    /* Consistent with Bootstrap */
+    box-shadow: none;
+    /* Ensure no conflicting shadow */
 }
 
 button {
     padding: 10px 20px;
-    background-color: #28a745;
+    background-color: #007bff;
+    /* Bootstrap primary color */
     color: white;
     border: none;
     cursor: pointer;
+    border-radius: 4px;
 }
 
 button:hover {
-    background-color: #218838;
+    background-color: #0056b3;
+    /* Bootstrap hover color for buttons */
 }
 
 ul {
     list-style-type: none;
+    padding-left: 0;
+    /* Remove default padding */
 }
 
 li {
     margin-bottom: 20px;
-    padding: 10px;
+    padding: 15px;
     background-color: #fff;
     border: 1px solid #ccc;
+    border-radius: 8px;
+    /* Consistent with Bootstrap cards */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* Light shadow for better visuals */
 }
 
 /* Progress bar container */
 .progress {
     width: 100%;
-    max-width: 300px;
+    max-width: 100%;
+    /* Allow it to scale with smaller screens */
     background-color: #f3f3f3;
     border-radius: 25px;
     overflow: hidden;
@@ -69,4 +83,13 @@ li {
     color: white;
     font-size: 12px;
     border-radius: 25px;
+}
+
+.card {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* Light shadow for better visuals */
+    border-radius: 8px;
+    /* Consistent with Bootstrap cards */
+    margin-bottom: 20px;
+    /* Add margin at the bottom of cards */
 }

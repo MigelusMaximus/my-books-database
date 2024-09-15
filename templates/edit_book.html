@@ -5,52 +5,88 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Book</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
-    <h1>Edit Book</h1>
+    <div class="container">
+        <h1 class="my-4 text-center">Edit Book</h1>
 
-    <form method="POST">
-        <label for="title">Title:</label><br>
-        <input type="text" id="title" name="title" value="{{ book.title }}" required><br><br>
+        <form method="POST">
+            <div class="form-group">
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" class="form-control" value="{{ book.title }}" required>
+            </div>
 
-        <label for="description">Description:</label><br>
-        <textarea id="description" name="description" required>{{ book.description }}</textarea><br><br>
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" class="form-control" rows="4"
+                    required>{{ book.description }}</textarea>
+            </div>
 
-        <label for="cover_url">Cover Image URL:</label><br>
-        <input type="url" id="cover_url" name="cover_url" value="{{ book.cover_url }}" required><br><br>
+            <div class="form-group">
+                <label for="cover_url">Cover Image URL:</label>
+                <input type="url" id="cover_url" name="cover_url" class="form-control" value="{{ book.cover_url }}"
+                    required>
+            </div>
 
-        <label for="category">Category:</label><br>
-        <input type="text" id="category" name="category" value="{{ book.category }}" required><br><br>
+            <div class="form-group">
+                <label for="category">Category:</label>
+                <input type="text" id="category" name="category" class="form-control" value="{{ book.category }}"
+                    required>
+            </div>
 
-        <label for="tags">Tags (comma-separated):</label><br>
-        <input type="text" id="tags" name="tags" value="{{ book.tags if book else '' }}"><br><br>
-        <label for="status">Reading Status:</label><br>
-        <select id="status" name="status">
-            <option value="to read" {% if book.status=='to read' %}selected{% endif %}>To Read</option>
-            <option value="reading" {% if book.status=='reading' %}selected{% endif %}>Reading Right Now</option>
-            <option value="read" {% if book.status=='read' %}selected{% endif %}>Already Read</option>
-        </select><br><br>
+            <div class="form-group">
+                <label for="tags">Tags (comma-separated):</label>
+                <input type="text" id="tags" name="tags" class="form-control" value="{{ book.tags if book else '' }}">
+            </div>
 
-        <label for="pages">Total Pages:</label><br>
-        <input type="number" id="pages" name="pages" value="{{ book.pages }}" required><br><br>
+            <div class="form-group">
+                <label for="status">Reading Status:</label>
+                <select id="status" name="status" class="form-control">
+                    <option value="to read" {% if book.status=='to read' %}selected{% endif %}>To Read</option>
+                    <option value="reading" {% if book.status=='reading' %}selected{% endif %}>Reading Right Now
+                    </option>
+                    <option value="read" {% if book.status=='read' %}selected{% endif %}>Already Read</option>
+                </select>
+            </div>
 
-        <label for="pages_read">Pages Read:</label><br>
-        <input type="number" id="pages_read" name="pages_read" value="{{ book.pages_read }}" required><br><br>
+            <div class="form-group">
+                <label for="pages">Total Pages:</label>
+                <input type="number" id="pages" name="pages" class="form-control" value="{{ book.pages }}" required>
+            </div>
 
-        <label for="review">Review:</label><br>
-        <textarea id="review" name="review">{{ book.review }}</textarea><br><br>
+            <div class="form-group">
+                <label for="pages_read">Pages Read:</label>
+                <input type="number" id="pages_read" name="pages_read" class="form-control"
+                    value="{{ book.pages_read }}" required>
+            </div>
 
-        <label for="summary">Summary:</label><br>
-        <textarea id="summary" name="summary">{{ book.summary }}</textarea><br><br>
+            <div class="form-group">
+                <label for="review">Review:</label>
+                <textarea id="review" name="review" class="form-control" rows="3">{{ book.review }}</textarea>
+            </div>
 
-        <button type="submit">Save Changes</button>
-    </form>
+            <div class="form-group">
+                <label for="summary">Summary:</label>
+                <textarea id="summary" name="summary" class="form-control" rows="3">{{ book.summary }}</textarea>
+            </div>
 
+            <button type="submit" class="btn btn-primary btn-block">Save Changes</button>
+        </form>
 
-    <a href="{{ url_for('home') }}">Back to Home</a>
+        <div class="mt-4 text-center">
+            <a href="{{ url_for('home') }}" class="btn btn-secondary">Back to Home</a>
+        </div>
+    </div>
 
+    <!-- Bootstrap JS (optional) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
