@@ -15,11 +15,14 @@ class Book(db.Model):
     title = db.Column(db.String(150), nullable=False)
     description = db.Column(db.String(500), nullable=False)
     cover_url = db.Column(db.String(250), nullable=False)
-    category = db.Column(db.String(100), nullable=False)  # New field for categories
-    tags = db.Column(db.String(250), nullable=True)  # Add a tags field (comma-separated)
-    status = db.Column(db.String(50), nullable=False, default='to read')  # Status: "to read", "reading", "read"
-    pages = db.Column(db.Integer, nullable=True)  # Total pages
-    pages_read = db.Column(db.Integer, nullable=True, default=0)  # Pages read so far
+    category = db.Column(db.String(100), nullable=False)
+    tags = db.Column(db.String(250), nullable=True)
+    status = db.Column(db.String(50), nullable=False, default='to read')
+    pages = db.Column(db.Integer, nullable=True)
+    pages_read = db.Column(db.Integer, nullable=True, default=0)
+    review = db.Column(db.Text, nullable=True)  # New field for your review
+    summary = db.Column(db.Text, nullable=True)  # New field for a book summary
+
 
 
 
@@ -29,12 +32,11 @@ with app.app_context():
 
 @app.route('/')
 def home():
-
-    # Get the search query and filters from request.args
+    # Get the search query, filters, and sorting from request.args
     search_query = request.args.get('q', '')
     status_filter = request.args.get('status', '')
-    
-    
+    sort_by = request.args.get('sort_by', 'title')  # Default sorting by title
+
     # Base query to get all books
     query = Book.query
 
@@ -48,11 +50,18 @@ def home():
     if status_filter:
         query = query.filter_by(status=status_filter)
 
+    # Sorting logic
+    if sort_by == 'title':
+        query = query.order_by(Book.title.asc())
+    elif sort_by == 'category':
+        query = query.order_by(Book.category.asc())
+    elif sort_by == 'status':
+        query = query.order_by(Book.status.asc())
+    elif sort_by == 'progress':
+        query = query.order_by((Book.pages_read / Book.pages).desc())  # Sort by progress percentage
 
-
-    books = query.all()  # Fetch the filtered books
-    return render_template('index.html', books=books, search_query=search_query, status_filter=status_filter)
-
+    books = query.all()  # Fetch the filtered and sorted books
+    return render_template('index.html', books=books, search_query=search_query, status_filter=status_filter, sort_by=sort_by)
 
 @app.route('/add', methods=['GET', 'POST'])
 def add_book():
@@ -94,15 +103,24 @@ def edit_book(id):
         book.description = request.form['description']
         book.cover_url = request.form['cover_url']
         book.category = request.form['category']
-        book.tags = request.form['tags']  # Make sure tags are updated
-        book.status = request.form['status']  # Handle reading status
-        book.pages = request.form['pages']    # Handle total pages
-        book.pages_read = request.form['pages_read']  # Handle pages read
+        book.tags = request.form['tags']
+        book.status = request.form['status']
+        book.pages = request.form['pages']
+        book.pages_read = request.form['pages_read']
+        book.review = request.form['review']  # Update review
+        book.summary = request.form['summary']  # Update summary
         
         db.session.commit()
         return redirect(url_for('home'))
     
     return render_template('edit_book.html', book=book)
+
+
+
+@app.route('/book/<int:id>')
+def book_detail(id):
+    book = Book.query.get_or_404(id)
+    return render_template('book_detail.html', book=book)
 
 
 if __name__ == '__main__':

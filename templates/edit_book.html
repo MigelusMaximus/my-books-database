@@ -39,6 +39,11 @@
         <label for="pages_read">Pages Read:</label><br>
         <input type="number" id="pages_read" name="pages_read" value="{{ book.pages_read }}" required><br><br>
 
+        <label for="review">Review:</label><br>
+        <textarea id="review" name="review">{{ book.review }}</textarea><br><br>
+
+        <label for="summary">Summary:</label><br>
+        <textarea id="summary" name="summary">{{ book.summary }}</textarea><br><br>
 
         <button type="submit">Save Changes</button>
     </form>

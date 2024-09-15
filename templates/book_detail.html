@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ book.title }} - Book Details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <h1>{{ book.title }}</h1>
+    <img src="{{ book.cover_url }}" alt="Book Cover" style="width:200px;"><br><br>
+
+    <p><strong>Description:</strong> {{ book.description }}</p>
+    <p><strong>Category:</strong> {{ book.category }}</p>
+    <p><strong>Tags:</strong> {{ book.tags }}</p>
+    <p><strong>Status:</strong> {{ book.status }}</p>
+    <p><strong>Progress:</strong> {{ book.pages_read }} / {{ book.pages }} pages</p>
+
+    {% if book.pages > 0 %}
+    {% set percentage = (book.pages_read / book.pages) * 100 %}
+    <div class="progress">
+        <div class="progress-bar" data-progress="{{ percentage|int }}" aria-valuenow="{{ percentage|int }}"
+            aria-valuemin="0" aria-valuemax="100">
+            {{ percentage|int }}%
+        </div>
+    </div>
+    {% endif %}
+
+    <h2>My Review</h2>
+    <p>{{ book.review or "No review yet." }}</p>
+
+    <h2>Summary</h2>
+    <p>{{ book.summary or "No summary yet." }}</p>
+
+    <br><a href="{{ url_for('home') }}">Back to Home</a>
+</body>
+
+</html>

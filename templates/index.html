@@ -13,7 +13,7 @@
 
     <a href="{{ url_for('add_book') }}">Add a New Book</a>
 
-    <!-- Search and Filter Form -->
+    <!-- Search, Filter, and Sort Form -->
     <form method="GET" action="{{ url_for('home') }}">
         <input type="text" name="q" placeholder="Search by title, description, or tags" value="{{ search_query }}" />
 
@@ -23,13 +23,21 @@
             <option value="reading" {% if status_filter=='reading' %}selected{% endif %}>Reading Right Now</option>
             <option value="read" {% if status_filter=='read' %}selected{% endif %}>Already Read</option>
         </select>
-        <button type="submit">Search & Filter</button>
-    </form>
 
+        <!-- Sorting Dropdown -->
+        <select name="sort_by">
+            <option value="title" {% if sort_by=='title' %}selected{% endif %}>Sort by Title</option>
+            <option value="category" {% if sort_by=='category' %}selected{% endif %}>Sort by Category</option>
+            <option value="status" {% if sort_by=='status' %}selected{% endif %}>Sort by Status</option>
+            <option value="progress" {% if sort_by=='progress' %}selected{% endif %}>Sort by Reading Progress</option>
+        </select>
+
+        <button type="submit">Search & Sort</button>
+    </form>
     <ul>
         {% for book in books %}
         <li>
-            <h2>{{ book.title }}</h2>
+            <h2><a href="{{ url_for('book_detail', id=book.id) }}">{{ book.title }}</a></h2>
             <p>{{ book.description }}</p>
             <p><strong>Category:</strong> {{ book.category }}</p>
             <p><strong>Tags:</strong> {{ book.tags }}</p>
@@ -51,7 +59,6 @@
         </li>
         {% endfor %}
     </ul>
-
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 
