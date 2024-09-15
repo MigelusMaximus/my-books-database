@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add a New Book</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+    <h1>Add a New Book</h1>
+
+    <form method="POST" action="{{ url_for('add_book') }}">
+        <label for="title">Title:</label><br>
+        <input type="text" id="title" name="title" required><br><br>
+
+        <label for="description">Description:</label><br>
+        <textarea id="description" name="description" required></textarea><br><br>
+
+        <label for="cover_url">Cover Image URL:</label><br>
+        <input type="url" id="cover_url" name="cover_url" required><br><br>
+
+        <label for="category">Category:</label><br>
+        <select id="category" name="category">
+            <option value="Fiction">Fiction</option>
+            <option value="Non-fiction">Non-fiction</option>
+            <option value="Science">Science</option>
+            <option value="History">History</option>
+        </select><br><br>
+
+        <button type="submit">Add Book</button>
+    </form>
+
+    <a href="{{ url_for('home') }}">Back to Home</a>
+</body>
+
+</html>
