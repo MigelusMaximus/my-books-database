@@ -1,7 +1,8 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from flask_bcrypt import Bcrypt
+from flask_paginate import Pagination, get_page_parameter
 
 # Initialize Flask app and SQLAlchemy
 app = Flask(__name__)
@@ -75,8 +76,16 @@ def home():
     elif sort_by == 'progress':
         query = query.order_by((Book.pages_read / Book.pages).desc())  # Sort by progress percentage
 
-    books = query.all()  # Fetch the filtered and sorted books
-    return render_template('index.html', books=books, search_query=search_query, status_filter=status_filter, sort_by=sort_by)
+    # Pagination setup
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    per_page = 9  # Number of books to display per page
+    paginated_books = query.paginate(page=page, per_page=per_page, error_out=False)
+
+    
+    pagination = Pagination(page=page, total=paginated_books.total, search=False, record_name='books', per_page=per_page)
+
+    return render_template('index.html', books=paginated_books.items, search_query=search_query,
+                           status_filter=status_filter, sort_by=sort_by, pagination=pagination)
 
 @app.route('/add', methods=['GET', 'POST'])
 @login_required  # Ensure the user is logged in
@@ -109,6 +118,8 @@ def add_book():
         db.session.add(new_book)
         db.session.commit()
 
+        flash('Book added successfully!', 'success')
+
         return redirect(url_for('home'))
     return render_template('add_book.html')
 
@@ -134,6 +145,7 @@ def edit_book(id):
         book.summary = request.form['summary']  # Update summary
         
         db.session.commit()
+        flash('Book updated successfully!', 'success')
         return redirect(url_for('home'))
     
     return render_template('edit_book.html', book=book)
@@ -147,6 +159,7 @@ def delete_book(id):
     book = Book.query.get_or_404(id)
     db.session.delete(book)
     db.session.commit()
+    flash('Book deleted successfully!', 'danger')
     return redirect(url_for('home'))
 
 # Route for the book detail page
